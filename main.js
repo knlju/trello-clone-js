@@ -110,8 +110,10 @@ function createTaskNode(title, desc) {
     editBtn.innerHTML = "Edit <i class=\"fas fa-pen\"></i>"
     deleteBtn.innerHTML = "Delete <i class=\"fas fa-trash\"></i>"
 
-    newTaskNode.addEventListener("dragstart", () => console.log("dragstart"))
-    newTaskNode.addEventListener("dragend", () => console.log("dragend"))
+    newTaskNode.draggable = true
+
+    newTaskNode.addEventListener("dragstart", e => handleTaskDragStart(e, newTaskNode))
+    newTaskNode.addEventListener("dragend", e => handleTaskDragEnd(e, newTaskNode))
 
     btnsContainer.appendChild(editBtn)
     btnsContainer.appendChild(deleteBtn)
@@ -136,6 +138,7 @@ function renderList(list, index) {
     listNode.classList.add("board__list")
     const tasksContainer = document.createElement("div")
     tasksContainer.classList.add("board__tasks")
+    tasksContainer.addEventListener("dragover", e => handleTaskDragOver(e, tasksContainer))
 
     // Render tasks
     list.tasks.forEach(task => renderTask(task.title, task.text, tasksContainer))
@@ -148,6 +151,21 @@ function renderList(list, index) {
     listNode.appendChild(tasksContainer)
     listNode.appendChild(btnNewTask)
     boardNode.insertBefore(listNode, newListNode)
+}
+
+function handleTaskDragStart(e, taskNode) {
+    taskNode.classList.add("dragged")
+}
+
+function handleTaskDragEnd(e, taskNode) {
+    taskNode.classList.remove("dragged")
+}
+
+function handleTaskDragOver(e, taskContainer) {
+    e.preventDefault()
+    const dragged = document.querySelector(".dragged")
+    // console.log(dragged)
+    taskContainer.appendChild(dragged)
 }
 
 function init() {
