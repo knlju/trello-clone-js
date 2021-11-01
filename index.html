@@ -14,12 +14,14 @@
     <div class="container">
         <header class="header">
             <a class="header__logo" href="#">
-                <h1 class="header__title">Trello</h1>
+                <i class="fas fa-grip-vertical"></i>
+                <h1 class="header__title">Kanban</h1>
             </a>
+            <!-- <button class="header__menu board__task-delete"><i class="fas fa-bars"></i></button> -->
         </header>
         <main class="board">
             <div class="board__list board__list-new">
-                <button class="board__button board__list-new-btn">Add new list <i class="fas fa-plus"></i></button>
+                <button class="board__button board__list-new-btn"><i class="fas fa-plus"></i>Add new list</button>
             </div>
         </main>
     </div>
@@ -33,9 +35,17 @@
             <textarea class="edit__textarea" type="text" placeholder="Enter a card description..."></textarea>
         </div>
         <div class="edit__priority">
-            <button class="edit__priority-btn edit__priority-low"></button>
-            <button class="edit__priority-btn edit__priority-medium"></button>
-            <button class="edit__priority-btn edit__priority-high"></button>
+            <span class="edit__priority-span">Choose priority: </span>
+            <div class="edit__priority-btns">
+                <button class="edit__priority-btn edit__priority-finished" title="Finished"></button>
+                <button class="edit__priority-btn edit__priority-premium" title="Premium"></button>
+                <button class="edit__priority-btn edit__priority-bug" title="Bug"></button>
+                <button class="edit__priority-btn edit__priority-high" title="High Priority"></button>
+                <button class="edit__priority-btn edit__priority-need-testing" title="Needs Testing"></button>
+                <button class="edit__priority-btn edit__priority-discussion" title="Needs Discussion"></button>
+                <button class="edit__priority-btn edit__priority-low" title="Low Priority"></button>
+                <button class="edit__priority-btn edit__priority-test-missing" title="Tests Missing"></button>
+            </div>
         </div>
         <div class="edit__btns">
             <button class="edit__delete board__task-delete">Delete <i class="fas fa-trash"></i></button>

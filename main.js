@@ -1,42 +1,42 @@
 let boardList
 
 const boardListDummyData = [{
-        title: "Backlog",
-        tasks: [{
-                title: "title 1",
-                text: "text 1"
-            },
-            {
-                title: "title 2",
-                text: "text 2",
-                priority: "max",
-            },
-            {
-                title: "title 3",
-                text: "text 3"
-            }
-        ]
+    title: "Backlog",
+    tasks: [{
+        title: "title 1",
+        text: "text 1"
     },
     {
-        title: "In Progress",
-        tasks: [{
-            title: "title 1",
-            text: "text 1"
-        }]
+        title: "title 2",
+        text: "text 2",
+        priority: "max",
     },
     {
-        title: "Complete",
-        tasks: [{
-            title: "title 1",
-            text: "text 1"
-        }]
-    }, {
-        title: "On Hold",
-        tasks: [{
-            title: "title 1",
-            text: "text 1"
-        }]
-    },
+        title: "title 3",
+        text: "text 3"
+    }
+    ]
+},
+{
+    title: "In Progress",
+    tasks: [{
+        title: "title 1",
+        text: "text 1"
+    }]
+},
+{
+    title: "Complete",
+    tasks: [{
+        title: "title 1",
+        text: "text 1"
+    }]
+}, {
+    title: "On Hold",
+    tasks: [{
+        title: "title 1",
+        text: "text 1"
+    }]
+},
 ]
 
 const boardNode = document.querySelector(".board")
@@ -141,7 +141,7 @@ function renderList(list, index) {
     list.tasks.forEach(task => renderTask(task.title, task.text, tasksContainer))
 
     const btnNewTask = document.createElement("btn")
-    btnNewTask.innerHTML = "New Task <i class=\"fas fa-plus\"></i>"
+    btnNewTask.innerHTML = "<i class=\"fas fa-plus\"></i> Add New Task"
     btnNewTask.addEventListener("click", () => handleAddNewTaskClick(listNode))
     btnNewTask.classList.add("board__button")
     listNode.appendChild(listTitle)

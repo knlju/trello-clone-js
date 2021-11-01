@@ -6,60 +6,117 @@
 }
 html,
 button,
-input {
+input,
+textarea {
     font-family: 'Montserrat', sans-serif;
+}
+body {
+    background: url('https://images.unsplash.com/photo-1477346611705-65d1883cee1e?auto=format&fit=crop&ixid=eyJhcHBfaWQiOjEyMDd9&ixlib=rb-1.2.1&q=80&w=1950') center center no-repeat;
+    background-size: cover;
 }
 .container {
     max-width: 1200px;
     padding: 0 20px;
     margin: o auto;
 }
+.header {
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 5px 5px -5px rgba(0,0,0,0.5);
+    margin-bottom: 50px;
+}
+.header__menu {
+    font-size: 18px;
+}
 .header__logo {
     text-decoration: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: white;
+}
+.header__logo i {
+    font-size: 30px;
+    color: #8e364e;
+    text-shadow: 0px 2px 15px #fff;
+}
+.header__title {
+    margin-left: 5px;
+    font-size: 36px;
+    font-weight: 600;
+    color: #8e364e;
+    text-shadow: 0px 2px 15px #fff;
 }
 .board {
-    background-color: blue;
+    background-color: transparent;
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
-    gap: 15px;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 100px;
 }
 .board__list {
-    background-color: yellow;
-    padding: 10px;
-    width: 200px;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px 10px;
+    flex: 0 0 280px;
     display: flex;
     flex-direction: column;
     gap: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 9px -2px rgba(255,255,255,1);
 }
 .board__title {
-    color: white;
+    font-size: 20px;
+    padding: 0 10px;
 }
 .board__button {
     outline: none;
     border: none;
     background: transparent;
     cursor: pointer;
-    color: green;
+    color: #3f51b5;
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 0 10px;
 
-    border: 2px solid black;
+    /* border: 2px solid black; */
 }
 .board__tasks {
     display: flex;
     flex-direction: column;
     gap: 15px;
 
-    border: 2px solid pink;
+    /* border: 2px solid pink; */
 }
 .board__task {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 75%);
+    border-top: 10px solid #3f51b5;
 
-    border: 2px solid black;
+    /* border: 2px solid black; */
+}
+.board__task-title {
+    text-transform: capitalize;
+    font-size: 20px;
+}
+.board__task-desc {
+    text-transform: capitalize;
+    font-size: 14px;
+    font-weight: 400;
+    margin-bottom: 15px;
 }
 .board__task-btns {
     display: flex;
@@ -74,13 +131,16 @@ input {
     border: none;
     background: transparent;
     cursor: pointer;
-    gap: 5px;
+    gap: 8px;
+    font-size: 13px;
+    text-transform: uppercase;
+    font-weight: 600;
 }
 .board__task-delete {
-    color: red;
+    color: #EF7564;
 }
 .board__task-edit {
-    color: blue;
+    color: #3f51b5;
 }
 
 
@@ -88,15 +148,15 @@ input {
     background-color: white;
     box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.75);
     position: relative;
-    width: 250px;
-    padding: 15px;
+    width: 450px;
+    padding: 20px 15px;
     border-radius: 5px;
     position: fixed;
     top: 50%;
     left: 50%;
     opacity: 0;
     transform: translate(-50%, -50%) scale(0);
-    transition: all 0.5s ease;
+    transition: all 0.3s ease;
 }
 .edit.open-edit {
     opacity: 1;
@@ -107,21 +167,28 @@ input {
     flex-direction: column;
     margin-bottom: 15px;
 }
+.edit__title-label {
+    font-size: 12px;
+    margin-bottom: 5px;
+}
 .edit__title-input {
     border: none;
     outline: none;
-    border-bottom: 2px solid black;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.3);
     background: transparent;
     cursor: pointer;
+    font-size: 16px;
+    padding: 0 5px;
 }
 
 .edit__desc {
     padding: 10px;
-    border: 2px solid grey;
+    border: 2px solid rgba(0, 0, 0, 0.3);
     position: relative;
     border-radius: 5px;
     margin-bottom: 10px;
     height: 100px;
+    font-size: 16px;
 }
 .edit__textarea {
     border: none;
@@ -131,17 +198,19 @@ input {
     width: 100%;
     resize: none;
     height: 100%;
+    font-size: 16px;
+    color: black;
+    padding-left: 10px;
 }
 .edit__desc::before {
     content: 'Text';
     background-color: white;
     position: absolute;
-    top: -11px;
+    top: -12px;
     left: 10px;
     padding: 2px 5px;
-    font-size: 10px;
+    font-size: 12px;
     border-radius: 5px;
-    font-weight: 600;
 }
 .edit__btns {
     display: flex;
@@ -151,36 +220,61 @@ input {
 .edit__btns-right {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
 }
 .edit__cancel {
     color: black;
 }
 .edit__save {
-    color: blue;
+    color: #3f51b5;
 }
 .edit__priority {
+    gap: 15px;
+    margin-bottom: 30px;
+}
+.edit__priority-btns {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 15px;
-    margin-bottom: 15px;
+    gap: 7px;
+    flex-wrap: wrap;
 }
 .edit__priority-btn {
     border: none;
     outline: none;
-    background-color: red;
     cursor: pointer;
     height: 10px;
-    width: 35px;
+    width: 40px;
     border-radius: 5px;
 }
-.edit__priority-low {
-    background-color: red;
+.edit__priority-span {
+    font-size: 16px;
+    display: block;
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 5px;
 }
-.edit__priority-medium {
-    background-color: blue;
+.edit__priority-bug {
+    background-color: #EF7564;
+}
+.edit__priority-premium {
+    background-color: #3f51b5;
+}
+.edit__priority-finished {
+    background-color: #7BC86C;
+}
+.edit__priority-need-testing {
+    background-color: #F5DD29;
+}
+.edit__priority-high {
+    background-color: #FFAF3F;
+}
+.edit__priority-discussion {
+    background-color: #CD8DE5;
 }
 .edit__priority-low {
-    background-color: green;
+    background-color: #5BA4CF;
+}
+.edit__priority-test-missing {
+    background-color: #172B4D;
 }
