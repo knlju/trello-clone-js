@@ -74,10 +74,113 @@ input {
     border: none;
     background: transparent;
     cursor: pointer;
+    gap: 5px;
 }
 .board__task-delete {
     color: red;
 }
 .board__task-edit {
     color: blue;
+}
+
+
+.edit {
+    background-color: white;
+    box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.75);
+    position: relative;
+    width: 250px;
+    padding: 15px;
+    border-radius: 5px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+    transition: all 0.5s ease;
+}
+.edit.open-edit {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+.edit__title {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+.edit__title-input {
+    border: none;
+    outline: none;
+    border-bottom: 2px solid black;
+    background: transparent;
+    cursor: pointer;
+}
+
+.edit__desc {
+    padding: 10px;
+    border: 2px solid grey;
+    position: relative;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    height: 100px;
+}
+.edit__textarea {
+    border: none;
+    outline: none;
+    background: transparent;
+    cursor: pointer;
+    width: 100%;
+    resize: none;
+    height: 100%;
+}
+.edit__desc::before {
+    content: 'Text';
+    background-color: white;
+    position: absolute;
+    top: -11px;
+    left: 10px;
+    padding: 2px 5px;
+    font-size: 10px;
+    border-radius: 5px;
+    font-weight: 600;
+}
+.edit__btns {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.edit__btns-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.edit__cancel {
+    color: black;
+}
+.edit__save {
+    color: blue;
+}
+.edit__priority {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+.edit__priority-btn {
+    border: none;
+    outline: none;
+    background-color: red;
+    cursor: pointer;
+    height: 10px;
+    width: 35px;
+    border-radius: 5px;
+}
+.edit__priority-low {
+    background-color: red;
+}
+.edit__priority-medium {
+    background-color: blue;
+}
+.edit__priority-low {
+    background-color: green;
 }
