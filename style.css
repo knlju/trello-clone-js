@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html,
+button,
+input {
+    font-family: 'Montserrat', sans-serif;
+}
+.container {
+    max-width: 1200px;
+    padding: 0 20px;
+    margin: o auto;
+}
+.header__logo {
+    text-decoration: none;
+}
+.board {
+    background-color: blue;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 15px;
+}
+.board__list {
+    background-color: yellow;
+    padding: 10px;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.board__title {
+    color: white;
+}
+.board__button {
+    outline: none;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: green;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    border: 2px solid black;
+}
+.board__tasks {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    border: 2px solid pink;
+}
+.board__task {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    border: 2px solid black;
+}
+.board__task-btns {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.board__task-delete,
+.board__task-edit {
+    display: flex;
+    align-items: center;
+    outline: none;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+.board__task-delete {
+    color: red;
+}
+.board__task-edit {
+    color: blue;
+}
