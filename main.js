@@ -4,7 +4,8 @@ const boardListDummyData = [{
     title: "Backlog",
     tasks: [{
         title: "title 1",
-        text: "text 1"
+        text: "text 1",
+        priority: "test priority"
     },
     {
         title: "title 2",
@@ -41,22 +42,75 @@ const boardListDummyData = [{
 
 const boardNode = document.querySelector(".board")
 const newListNode = document.querySelector(".board__list-new")
+const modalSaveBtn = document.querySelector(".edit__save")
+const modalCancelBtn = document.querySelector(".edit__cancel")
+const modalTitle = document.querySelector(".edit__title-input")
+const modalTextArea = document.querySelector(".edit__textarea")
+const modalNode = document.querySelector(".edit")
+// const 
 
 function updateLocalStorage() {
     localStorage.setItem("boardList", JSON.stringify(boardList))
 }
 
+function openModal(callback) {
+    console.log("open modal")
+    modalNode.classList.add("open-edit")
+    modalSaveBtn.onclick = callback
+    console.log(modalSaveBtn.onclick)
+}
+
+function closeModal() {
+    modalNode.classList.remove("open-edit")
+}
+
 function handleAddNewTaskClick(listNode) {
     // otvori modal za novi task
-    console.log(listNode)
+    
+    modalTitle.value = ""
+    modalTextArea.value = ""
+    function handleModalNewTaskSaveClick() {
+        console.log("handleModalNewTaskSaveClick")
+        const title = modalTitle.value
+        const text = modalTextArea.value
+        appendTask(title, text, listNode)
+        modalTitle.value = ""
+        modalTextArea.value = ""
+        closeModal()
+    }
+    openModal(handleModalNewTaskSaveClick)
 }
 
-function handleSaveNewTaskClick() {
-    console.log("handleSaveNewTaskClick")
-}
+function handleEditTaskClick(e, taskNode) {
+    // todo napuni text i title
+    const titleNode = taskNode.querySelector(".board__task-title")
+    const descNode = taskNode.querySelector(".board__task-desc")
+    // na primer
+    // const borderColor = taskNode.querySelector(".selected").dataset.color
+    modalTitle.value = titleNode.textContent
+    modalTextArea.value = descNode.textContent
+    // taskNode.style.borderTop = `10px solid ${color}`
 
-function handleEditTaskClick() {
-    console.log("handleEditTaskClick")
+    function handleModalNewTaskSaveClick() {
+        const newTitle = modalTitle.value
+        const newText = modalTextArea.value
+        modalTitle.value = ""
+        modalTextArea.value = ""
+        const taskIndex = [...taskNode.parentElement.children].indexOf(taskNode)
+        const listIndex = taskNode.closest(".board__list").dataset.index
+
+        const task = boardList[listIndex].tasks[taskIndex]
+
+        task.title = newTitle
+        task.text = newText
+
+        titleNode.textContent = newTitle
+        descNode.textContent = newText
+
+        updateLocalStorage()
+        closeModal()
+    }
+    openModal(handleModalNewTaskSaveClick)
 }
 
 function handleDeleteTaskClick(e, taskNode) {
@@ -74,22 +128,27 @@ function handleDeleteTaskClick(e, taskNode) {
     taskNode.remove()
 }
 
-function appendTask(title, desc, listNode) {
+function appendTask(title, text, listNode) {
     // dodaj task na kraj liste
     // renderuj ga
     const listIndex = listNode.dataset.index
     const currList = boardList[listIndex]
-    currList.push({
+    currList.tasks.push({
         title,
-        desc
+        text
     })
+    console.log(currList)
+    console.log(boardList)
+    updateLocalStorage()
     // ili renderList ?
-    renderTask(title, desc, listNode)
+    renderTask(title, text, listNode)
 }
 
-function createTaskNode(title, desc) {
+function createTaskNode(title, desc, prioColor = "red") {
     const newTaskNode = document.createElement("div")
     newTaskNode.classList.add("board__task")
+    // moze i preko klasa
+    newTaskNode.style.borderTop = `10px solid ${prioColor}`
 
     const taskTitle = document.createElement("h3")
     taskTitle.textContent = title
@@ -125,16 +184,36 @@ function createTaskNode(title, desc) {
 
 function renderTask(title, desc, listNode) {
     const newTaskNode = createTaskNode(title, desc)
-    listNode.appendChild(newTaskNode)
+    const addNewTaskBtn = listNode.querySelector(".board__button")
+    listNode.insertBefore(newTaskNode, addNewTaskBtn)
 }
 
 function renderList(list, index) {
     // todo appendList
     const listNode = document.createElement("div")
     listNode.dataset.index = index
+
+    // todo razmisli o imenima klasa
+    const listHeaderContainer = document.createElement("div")
+    listHeaderContainer.classList.add("board__task-btns")
+
     const listTitle = document.createElement("h2")
     listTitle.classList.add("board__title")
     listTitle.innerHTML = list.title
+
+    const headerBtns = document.createElement("div")
+    headerBtns.classList.add("edit__btns-right")
+    const editBtn = document.createElement("button")
+    const deleteBtn = document.createElement("button")
+    editBtn.classList.add("board__task-edit")
+    deleteBtn.classList.add("board__task-btn")
+    editBtn.innerHTML = "<i class=\"fas fa-pen\"></i>"
+    deleteBtn.innerHTML = "<i class=\"fas fa-trash\"></i>"
+
+    headerBtns.append(editBtn, deleteBtn)
+
+    listHeaderContainer.append(listTitle, headerBtns)
+
     listNode.classList.add("board__list")
     const tasksContainer = document.createElement("div")
     tasksContainer.classList.add("board__tasks")
@@ -143,11 +222,11 @@ function renderList(list, index) {
     // Render tasks
     list.tasks.forEach(task => renderTask(task.title, task.text, tasksContainer))
 
-    const btnNewTask = document.createElement("btn")
+    const btnNewTask = document.createElement("button")
     btnNewTask.innerHTML = "<i class=\"fas fa-plus\"></i> Add New Task"
     btnNewTask.addEventListener("click", () => handleAddNewTaskClick(listNode))
     btnNewTask.classList.add("board__button")
-    listNode.appendChild(listTitle)
+    listNode.appendChild(listHeaderContainer)
     listNode.appendChild(tasksContainer)
     listNode.appendChild(btnNewTask)
     boardNode.insertBefore(listNode, newListNode)
@@ -177,5 +256,7 @@ function init() {
     console.log(boardList)
     boardList.forEach((list, index) => renderList(list, index))
 }
+
+modalCancelBtn.addEventListener("click", closeModal)
 
 init()

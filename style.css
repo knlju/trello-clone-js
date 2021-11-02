@@ -278,3 +278,6 @@ body {
 .edit__priority-test-missing {
     background-color: #172B4D;
 }
+.edit__priority-selected {
+    border: 1px solid black;
+}
