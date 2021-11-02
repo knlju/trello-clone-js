@@ -47,35 +47,46 @@ const modalCancelBtn = document.querySelector(".edit__cancel")
 const modalTitle = document.querySelector(".edit__title-input")
 const modalTextArea = document.querySelector(".edit__textarea")
 const modalNode = document.querySelector(".edit")
+const addNewLIstBtn = document.querySelector('.board__list-new-btn');
 // const 
 
 function updateLocalStorage() {
     localStorage.setItem("boardList", JSON.stringify(boardList))
 }
 
-function openModal(callback) {
+function openModal(callback, list = false) {
     console.log("open modal")
-    modalNode.classList.add("open-edit")
+    list ? modalNode.classList.add("open-list") : modalNode.classList.add("open-edit")
     modalSaveBtn.onclick = callback
     console.log(modalSaveBtn.onclick)
 }
 
 function closeModal() {
     modalNode.classList.remove("open-edit")
+    modalNode.classList.remove("open-list")
+    modalTitle.value = ""
+    modalTextArea.value = ""
 }
+function handleSaveNewListClick() {
+    const newList = {
+        title: modalTitle.value,
+        tasks: []
+    }
+
+    renderList(newList, boardList.length)
+    closeModal()
+    boardList.push(newList)
+    updateLocalStorage()
+}
+addNewLIstBtn.addEventListener("click", () => openModal(handleSaveNewListClick, list = true));
 
 function handleAddNewTaskClick(listNode) {
     // otvori modal za novi task
-
-    modalTitle.value = ""
-    modalTextArea.value = ""
     function handleModalNewTaskSaveClick() {
         console.log("handleModalNewTaskSaveClick")
         const title = modalTitle.value
         const text = modalTextArea.value
         appendTask(title, text, listNode)
-        modalTitle.value = ""
-        modalTextArea.value = ""
         closeModal()
     }
     openModal(handleModalNewTaskSaveClick)
@@ -94,8 +105,6 @@ function handleEditTaskClick(e, taskNode) {
     function handleModalNewTaskSaveClick() {
         const newTitle = modalTitle.value
         const newText = modalTextArea.value
-        modalTitle.value = ""
-        modalTextArea.value = ""
         const taskIndex = [...taskNode.parentElement.children].indexOf(taskNode)
         const listIndex = taskNode.closest(".board__list").dataset.index
 

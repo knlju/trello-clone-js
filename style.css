@@ -156,9 +156,14 @@ body {
     transform: translate(-50%, -50%) scale(0);
     transition: all 0.3s ease;
 }
-.edit.open-edit {
+.edit.open-edit,
+.edit.open-list {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
+}
+.edit.open-list .edit__desc,
+.edit.open-list .edit__priority {
+    display: none;
 }
 .edit__title {
     display: flex;
