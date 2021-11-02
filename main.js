@@ -2,41 +2,18 @@ let boardList
 
 const boardListDummyData = [{
     title: "Backlog",
-    tasks: [{
-        title: "title 1",
-        text: "text 1",
-        priority: "test priority"
-    },
-    {
-        title: "title 2",
-        text: "text 2",
-        priority: "max",
-    },
-    {
-        title: "title 3",
-        text: "text 3"
-    }
-    ]
+    tasks: []
 },
 {
     title: "In Progress",
-    tasks: [{
-        title: "title 1",
-        text: "text 1"
-    }]
+    tasks: []
 },
 {
     title: "Complete",
-    tasks: [{
-        title: "title 1",
-        text: "text 1"
-    }]
+    tasks: []
 }, {
     title: "On Hold",
-    tasks: [{
-        title: "title 1",
-        text: "text 1"
-    }]
+    tasks: []
 },
 ]
 
@@ -47,26 +24,33 @@ const modalCancelBtn = document.querySelector(".edit__cancel")
 const modalTitle = document.querySelector(".edit__title-input")
 const modalTextArea = document.querySelector(".edit__textarea")
 const modalNode = document.querySelector(".edit")
-const addNewLIstBtn = document.querySelector('.board__list-new-btn');
-// const 
+const addNewListBtn = document.querySelector('.board__list-new-btn')
+const priorityBtns = document.querySelectorAll(".edit__priority-btn")
+
+// premium priority by default
+let selectedColor = "#3f51b5"
+let draggedTask
+let dragListSource
+let lastAfterIndex
 
 function updateLocalStorage() {
     localStorage.setItem("boardList", JSON.stringify(boardList))
 }
 
 function openModal(callback, list = false) {
-    console.log("open modal")
     list ? modalNode.classList.add("open-list") : modalNode.classList.add("open-edit")
     modalSaveBtn.onclick = callback
-    console.log(modalSaveBtn.onclick)
 }
 
 function closeModal() {
     modalNode.classList.remove("open-edit")
     modalNode.classList.remove("open-list")
+    priorityBtns.forEach(btn => btn.classList.remove("edit__priority-selected"))
+    selectedColor = "#3f51b5"
     modalTitle.value = ""
     modalTextArea.value = ""
 }
+
 function handleSaveNewListClick() {
     const newList = {
         title: modalTitle.value,
@@ -78,31 +62,43 @@ function handleSaveNewListClick() {
     boardList.push(newList)
     updateLocalStorage()
 }
-addNewLIstBtn.addEventListener("click", () => openModal(handleSaveNewListClick, list = true));
+
+addNewListBtn.addEventListener("click", () => openModal(handleSaveNewListClick, list = true))
+
+function handlePrioBtnClick(prioBtn) {
+    selectedColor = prioBtn.dataset.color
+    priorityBtns.forEach(btn => btn.classList.remove("edit__priority-selected"))
+    prioBtn.classList.add("edit__priority-selected")
+}
+
+priorityBtns.forEach(btn => btn.addEventListener("click", () => handlePrioBtnClick(btn)))
 
 function handleAddNewTaskClick(listNode) {
     // otvori modal za novi task
     function handleModalNewTaskSaveClick() {
-        console.log("handleModalNewTaskSaveClick")
         const title = modalTitle.value
         const text = modalTextArea.value
-        appendTask(title, text, listNode)
+        const color = selectedColor
+        appendTask(title, text, color, listNode)
         closeModal()
     }
     openModal(handleModalNewTaskSaveClick)
 }
 
 function handleEditTaskClick(e, taskNode) {
-    // todo napuni text i title
     const titleNode = taskNode.querySelector(".board__task-title")
     const descNode = taskNode.querySelector(".board__task-desc")
-    // na primer
-    // const borderColor = taskNode.querySelector(".selected").dataset.color
     modalTitle.value = titleNode.textContent
     modalTextArea.value = descNode.textContent
-    // taskNode.style.borderTop = `10px solid ${color}`
+    const currColor = taskNode.style.borderTopColor
 
-    function handleModalNewTaskSaveClick() {
+    priorityBtns.forEach(btn => {
+        (btn.dataset.color === currColor)
+            ? btn.classList.add("edit__priority-selected")
+            : btn.classList.remove("edit__priority-selected")
+    })
+
+    function handleModalEditTaskSaveClick() {
         const newTitle = modalTitle.value
         const newText = modalTextArea.value
         const taskIndex = [...taskNode.parentElement.children].indexOf(taskNode)
@@ -112,52 +108,43 @@ function handleEditTaskClick(e, taskNode) {
 
         task.title = newTitle
         task.text = newText
+        task.color = selectedColor
 
         titleNode.textContent = newTitle
         descNode.textContent = newText
+        taskNode.style.borderTop = `10px solid ${selectedColor}`
 
         updateLocalStorage()
         closeModal()
     }
-    openModal(handleModalNewTaskSaveClick)
+    openModal(handleModalEditTaskSaveClick)
 }
 
 function handleDeleteTaskClick(e, taskNode) {
-    console.log("handleDeleteTaskClick")
-    console.log(taskNode)
-
     const taskIndex = [...taskNode.parentElement.children].indexOf(taskNode)
     const listIndex = taskNode.closest(".board__list").dataset.index
-    console.log("taskIndex", taskIndex, "listIndex", listIndex)
-    console.log(boardList[listIndex])
-
     boardList[listIndex].tasks.splice(taskIndex, 1)
     updateLocalStorage()
-    // remove from html
     taskNode.remove()
 }
 
-function appendTask(title, text, listNode) {
-    // dodaj task na kraj liste
-    // renderuj ga
+function appendTask(title, text, color, listNode) {
     const listIndex = listNode.dataset.index
     const currList = boardList[listIndex]
     currList.tasks.push({
         title,
-        text
+        text,
+        color
     })
-    console.log(currList)
-    console.log(boardList)
     updateLocalStorage()
-    // ili renderList ?
-    renderTask(title, text, listNode)
+    const blNode = listNode.querySelector(".board__tasks")
+    renderTask(title, text, color, blNode)
 }
 
-function createTaskNode(title, desc, prioColor = "red") {
+function createTaskNode(title, desc, color) {
     const newTaskNode = document.createElement("div")
     newTaskNode.classList.add("board__task")
-    // moze i preko klasa
-    newTaskNode.style.borderTop = `10px solid ${prioColor}`
+    newTaskNode.style.borderTop = `10px solid ${color}`
 
     const taskTitle = document.createElement("h3")
     taskTitle.textContent = title
@@ -191,10 +178,9 @@ function createTaskNode(title, desc, prioColor = "red") {
     return newTaskNode
 }
 
-function renderTask(title, desc, listNode) {
-    const newTaskNode = createTaskNode(title, desc)
-    const addNewTaskBtn = listNode.querySelector(".board__button")
-    listNode.insertBefore(newTaskNode, addNewTaskBtn)
+function renderTask(title, desc, color, listNode) {
+    const newTaskNode = createTaskNode(title, desc, color)
+    listNode.appendChild(newTaskNode)
 }
 
 function renderList(list, index) {
@@ -221,10 +207,10 @@ function renderList(list, index) {
 
     deleteBtn.addEventListener("click", (e) => {
         boardList.splice(index, 1)
-        const boardLists = document.querySelectorAll(".board__list:not(.board__list-new)");
+        const boardLists = document.querySelectorAll(".board__list:not(.board__list-new)")
         boardLists.forEach(list => list.remove())
         boardList.forEach((list, i) => renderList(list, i))
-        updateLocalStorage();
+        updateLocalStorage()
     })
 
     headerBtns.append(editBtn, deleteBtn)
@@ -237,7 +223,7 @@ function renderList(list, index) {
     tasksContainer.addEventListener("dragover", e => handleTaskDragOver(e, tasksContainer))
 
     // Render tasks
-    list.tasks.forEach(task => renderTask(task.title, task.text, tasksContainer))
+    list.tasks.forEach(task => renderTask(task.title, task.text, task.color, tasksContainer))
 
     const btnNewTask = document.createElement("button")
     btnNewTask.innerHTML = "<i class=\"fas fa-plus\"></i> Add New Task"
@@ -247,9 +233,15 @@ function renderList(list, index) {
     listNode.appendChild(tasksContainer)
     listNode.appendChild(btnNewTask)
     boardNode.insertBefore(listNode, newListNode)
+
+    listNode.addEventListener("drop", e => handleDrop(e, listNode))
 }
 
 function handleTaskDragStart(e, taskNode) {
+    const taskIndex = [...taskNode.parentElement.children].indexOf(taskNode)
+    const listIndex = taskNode.closest(".board__list").dataset.index
+    dragListSource = boardList[listIndex]
+    draggedTask = boardList[listIndex].tasks[taskIndex]
     taskNode.classList.add("dragged")
 }
 
@@ -257,11 +249,41 @@ function handleTaskDragEnd(e, taskNode) {
     taskNode.classList.remove("dragged")
 }
 
+function handleDrop(e, listNode) {
+    const listIndex = listNode.dataset.index
+    const targetList = boardList[listIndex]
+    const taskIndex = dragListSource.tasks.indexOf(draggedTask)
+    dragListSource.tasks.splice(taskIndex, 1)
+    const targetTaskIndex = lastAfterIndex + 1
+    targetList.tasks.splice(targetTaskIndex, 0, draggedTask)
+    updateLocalStorage()
+}
+
 function handleTaskDragOver(e, taskContainer) {
     e.preventDefault()
+    const afterElement = getDragAfterElement(taskContainer, e.clientY)
+    // todo ruzno je ovo
+    lastAfterIndex = afterElement ? [...afterElement.parentElement.children].indexOf(afterElement) : 0
     const dragged = document.querySelector(".dragged")
-    // console.log(dragged)
-    taskContainer.appendChild(dragged)
+    if (afterElement == null) {
+        taskContainer.appendChild(dragged)
+    } else {
+        taskContainer.insertBefore(dragged, afterElement)
+    }
+}
+
+function getDragAfterElement(container, y) {
+    const draggableElements = [...container.querySelectorAll('.board__task:not(.dragged)')]
+
+    return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect()
+        const offset = y - box.top - box.height / 2
+        if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child }
+        } else {
+            return closest
+        }
+    }, { offset: Number.NEGATIVE_INFINITY }).element
 }
 
 function init() {
@@ -270,7 +292,6 @@ function init() {
         localStorage.setItem("boardList", JSON.stringify(boardListDummyData))
         boardList = boardListDummyData
     }
-    console.log(boardList)
     boardList.forEach((list, index) => renderList(list, index))
 }
 
