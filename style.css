@@ -163,7 +163,7 @@ body {
 .edit__title {
     display: flex;
     flex-direction: column;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 .edit__title-label {
     font-size: 12px;
@@ -176,7 +176,7 @@ body {
     background: transparent;
     cursor: pointer;
     font-size: 16px;
-    padding: 0 5px;
+    /* padding: 0 5px; */
 }
 .edit__desc {
     padding: 10px;
@@ -197,7 +197,7 @@ body {
     height: 100%;
     font-size: 16px;
     color: black;
-    padding-left: 10px;
+    /* padding-left: 10px; */
 }
 .edit__desc::before {
     content: 'Text';

@@ -66,7 +66,7 @@ function closeModal() {
 
 function handleAddNewTaskClick(listNode) {
     // otvori modal za novi task
-    
+
     modalTitle.value = ""
     modalTextArea.value = ""
     function handleModalNewTaskSaveClick() {
@@ -209,6 +209,14 @@ function renderList(list, index) {
     deleteBtn.classList.add("board__task-btn")
     editBtn.innerHTML = "<i class=\"fas fa-pen\"></i>"
     deleteBtn.innerHTML = "<i class=\"fas fa-trash\"></i>"
+
+    deleteBtn.addEventListener("click", (e) => {
+        boardList.splice(index, 1)
+        const boardLists = document.querySelectorAll(".board__list:not(.board__list-new)");
+        boardLists.forEach(list => list.remove())
+        boardList.forEach((list, i) => renderList(list, i))
+        updateLocalStorage();
+    })
 
     headerBtns.append(editBtn, deleteBtn)
 
