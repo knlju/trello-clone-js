@@ -85,7 +85,12 @@ body {
     text-transform: uppercase;
     font-weight: 600;
     font-size: 14px;
-    padding: 0 10px;
+    padding: 10px;
+    transition: all 0.3s ease;
+}
+.board__button:hover {
+    background-color: white;
+    border-radius: 5px;
 }
 .board__tasks {
     display: flex;
@@ -117,7 +122,7 @@ body {
     align-items: center;
     justify-content: space-between;
 }
-.board__task-delete,
+.board__task-btn,
 .board__task-edit {
     display: flex;
     align-items: center;
@@ -130,7 +135,7 @@ body {
     text-transform: uppercase;
     font-weight: 600;
 }
-.board__task-delete {
+.board__task-btn {
     color: #EF7564;
 }
 .board__task-edit {
@@ -172,7 +177,6 @@ body {
     font-size: 16px;
     padding: 0 5px;
 }
-
 .edit__desc {
     padding: 10px;
     border: 2px solid rgba(0, 0, 0, 0.3);
@@ -219,6 +223,9 @@ body {
 }
 .edit__save {
     color: #3f51b5;
+}
+.edit__delete {
+    color: #EF7564;
 }
 .edit__priority {
     gap: 15px;

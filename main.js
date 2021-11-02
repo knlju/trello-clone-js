@@ -104,7 +104,7 @@ function createTaskNode(title, desc) {
     const editBtn = document.createElement("button")
     const deleteBtn = document.createElement("button")
     editBtn.classList.add("board__task-edit")
-    deleteBtn.classList.add("board__task-delete")
+    deleteBtn.classList.add("board__task-btn")
     editBtn.addEventListener("click", e => handleEditTaskClick(e, newTaskNode))
     deleteBtn.addEventListener("click", e => handleDeleteTaskClick(e, newTaskNode))
     editBtn.innerHTML = "Edit <i class=\"fas fa-pen\"></i>"
