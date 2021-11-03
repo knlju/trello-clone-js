@@ -15,9 +15,6 @@ body {
     background-size: cover;
     min-height: 100vh;
 }
-/* button {
-    type
-} */
 .container {
     max-width: 1200px;
     padding: 0 20px;
@@ -316,7 +313,6 @@ body {
 }
 .no-pointer-events {
     pointer-events: none;
-    /* opacity: .8; */
     filter: brightness(70%);
 }
 .edit__title.has-error .edit__title-input {
