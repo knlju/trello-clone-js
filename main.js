@@ -93,11 +93,7 @@ function handleEditTaskClick(e, taskNode) {
     const currColor = taskNode.style.borderTopColor
     selectedColor = currColor
 
-    priorityBtns.forEach(btn => {
-        (btn.dataset.color === currColor)
-            ? btn.classList.add("edit__priority-selected")
-            : btn.classList.remove("edit__priority-selected")
-    })
+    priorityBtns.forEach(btn => (btn.dataset.color === currColor) ? btn.classList.add("edit__priority-selected") : btn.classList.remove("edit__priority-selected"))
 
     function handleModalEditTaskSaveClick() {
         const newTitle = modalTitle.value
@@ -206,12 +202,24 @@ function renderList(list, index) {
     editBtn.innerHTML = "<i class=\"fas fa-pen\"></i>"
     deleteBtn.innerHTML = "<i class=\"fas fa-trash\"></i>"
 
-    deleteBtn.addEventListener("click", (e) => {
+    deleteBtn.addEventListener("click", e => {
         boardList.splice(index, 1)
         const boardLists = document.querySelectorAll(".board__list:not(.board__list-new)")
         boardLists.forEach(list => list.remove())
         boardList.forEach((list, i) => renderList(list, i))
         updateLocalStorage()
+    })
+
+    editBtn.addEventListener("click", e => {
+        modalTitle.value = list.title
+        function handleModalEditListClick() {
+            boardList[index].title = modalTitle.value
+            listTitle.innerHTML = modalTitle.value
+            updateLocalStorage()
+            closeModal()
+        }
+
+        openModal(handleModalEditListClick, true)
     })
 
     headerBtns.append(editBtn, deleteBtn)
