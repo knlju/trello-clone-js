@@ -91,6 +91,7 @@ function handleEditTaskClick(e, taskNode) {
     modalTitle.value = titleNode.textContent
     modalTextArea.value = descNode.textContent
     const currColor = taskNode.style.borderTopColor
+    selectedColor = currColor
 
     priorityBtns.forEach(btn => {
         (btn.dataset.color === currColor)
